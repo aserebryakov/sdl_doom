@@ -62,7 +62,12 @@ static const char rcsid[] = "$Id: d_main.c,v 1.8 1997/02/03 22:45:09 b1 Exp $";
 
 #include "i_system.h"
 #include "i_sound.h"
+
+#ifdef __SDL__
+#include "i_sdl_video.h"
+#else
 #include "i_video.h"
+#endif
 
 #include "g_game.h"
 

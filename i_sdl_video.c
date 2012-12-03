@@ -227,7 +227,7 @@ int xlatekey(SDL_Event* event)
 	break;
 
       default:
-	if (rc >= SDLK_SPACE && rc <= SDLK_SLASH)
+	if (rc >= SDLK_SPACE && rc <= SDLK_DELETE)
 	    rc = rc - SDLK_SPACE + ' ';
 	if (rc >= 'A' && rc <= 'Z')
 	    rc = rc - 'A' + 'a';

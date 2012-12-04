@@ -1743,7 +1743,7 @@ void M_Drawer (void)
     static short	y;
     short		i;
     short		max;
-    char		string[40];
+    char		string[128];
     int			start;
 
     inhelpscreens = false;

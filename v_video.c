@@ -249,13 +249,13 @@ V_DrawPatch
 	{ 
 	    source = (byte *)column + 3; 
 	    dest = desttop + column->topdelta*SCREENWIDTH; 
-	    count = column->length; 
+	    count = column->length;
 			 
-	    while (count--) 
+	    while (count--)
 	    { 
 		*dest = *source++; 
 		dest += SCREENWIDTH; 
-	    } 
+	    }
 	    column = (column_t *)(  (byte *)column + column->length 
 				    + 4 ); 
 	} 

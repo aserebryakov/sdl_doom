@@ -83,7 +83,7 @@ clean:
 	rm -f *.o *~ *.flc
 	rm -f linux/*
 
-$(O)/linuxxdoom:	$(OBJS) $(O)/i_main.o
+$(O)/sdl_doom:	$(OBJS) $(O)/i_main.o
 	$(CC) $(CFLAGS) $(LDFLAGS) $(OBJS) $(O)/i_main.o \
 	-o $(O)/sdl_doom $(LIBS)
 

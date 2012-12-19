@@ -1161,7 +1161,7 @@ void M_SizeDisplay(int choice)
 	}
 	break;
       case 1:
-	if (screenSize < 8)
+	if (screenSize < MAX_SCREEN_SIZE)
 	{
 	    screenblocks++;
 	    screenSize++;
@@ -1169,7 +1169,6 @@ void M_SizeDisplay(int choice)
 	break;
     }
 	
-
     R_SetViewSize (screenblocks, detailLevel);
 }
 

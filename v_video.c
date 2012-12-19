@@ -482,12 +482,18 @@ V_GetBlock
 void V_Init (void) 
 { 
     int		i;
-    byte*	base;
-		
     // stick these in low dos memory on PCs
 
-    base = I_AllocLow (SCREENWIDTH*SCREENHEIGHT*4);
+#ifdef SDL
+    // screen[0] is allocated by SDL_SetVideoMode()
+    // in i_sdl_video.c
+    for (i=1 ; i<4 ; i++)
+    	screens[i] = I_AllocLow(SCREENWIDTH*SCREENHEIGHT);
+#else
+    byte*	base;
 
+    base = I_AllocLow (SCREENWIDTH*SCREENHEIGHT*4);
     for (i=0 ; i<4 ; i++)
-	screens[i] = base + i*SCREENWIDTH*SCREENHEIGHT;
+        screens[i] = base + i*SCREENWIDTH*SCREENHEIGHT;
+#endif
 }

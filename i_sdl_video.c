@@ -99,7 +99,7 @@ void I_InitGraphics(void)
     }
 
     if (multiply == 1)
-    	screens[0] = (unsigned char *) (screen->pixels);
+    	screens[0] = (byte*) (screen->pixels);
     else
     	I_Error("Unsupported Mode");
 

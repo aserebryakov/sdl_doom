@@ -436,9 +436,17 @@ void D_PageTicker (void)
 //
 // D_PageDrawer
 //
+// Draws menu background
+
+#define PAGE_HALF_WIDTH		160
+#define PAGE_HALF_HEIGHT	100
+#define PAGE_X 				(SCREENWIDTH/2 - PAGE_HALF_WIDTH)
+#define PAGE_Y				(SCREENHEIGHT/2 - PAGE_HALF_HEIGHT)
+
+
 void D_PageDrawer (void)
 {
-    V_DrawPatch (0,0, 0, W_CacheLumpName(pagename, PU_CACHE));
+    V_DrawPatch(PAGE_X/*0*/, PAGE_Y/*0*/, 0, W_CacheLumpName(pagename, PU_CACHE));
 }
 
 

@@ -309,9 +309,6 @@ Z_FreeTags
 	 block = next)
     {
     	// get link before freeing
-#ifdef DEBUG
-    	printf("%s: block->next = %p\n", __FUNCTION__, block->next);
-#endif
     	next = block->next;
 
     	// free block?

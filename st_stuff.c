@@ -1487,9 +1487,17 @@ void ST_Stop (void)
     st_stopped = true;
 }
 
+
+/******************************************************************************/
+/*                              ST_Init                                       */
+/*                                                                            */
+/*  This function initializes buffer for the status bar drawing               */
+/*                                                                            */
+/******************************************************************************/
+
 void ST_Init (void)
 {
     veryfirsttime = 0;
     ST_loadData();
-    screens[4] = (byte *) Z_Malloc(ST_WIDTH*ST_HEIGHT, PU_STATIC, 0);
+    screens[4] = (byte *) Z_Malloc(SCREENWIDTH*ST_HEIGHT, PU_STATIC, 0);
 }

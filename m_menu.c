@@ -117,7 +117,7 @@ char gammamsg[5][26] =
 
 // we are going to be entering a savegame string
 int			saveStringEnter;              
-int             	saveSlot;	// which slot to save in
+int         saveSlot;		// which slot to save in
 int			saveCharIndex;	// which char we're editing
 // old save description before edit
 char			saveOldString[SAVESTRINGSIZE];  
@@ -128,7 +128,7 @@ boolean			menuactive;
 #define SKULLXOFF		-32
 #define LINEHEIGHT		16
 
-extern boolean		sendpause;
+extern boolean	sendpause;
 char			savegamestrings[10][SAVESTRINGSIZE];
 
 char	endstring[160];
@@ -236,6 +236,10 @@ void M_ClearMenus (void);
 //
 // DOOM MENU
 //
+
+#define MAIN_MENU_ITEMS_START_X (SCREENWIDTH/2 - 63)
+#define MAIN_MENU_ITEMS_START_Y (SCREENHEIGHT/2 - 36)
+
 enum
 {
     newgame = 0,
@@ -264,7 +268,8 @@ menu_t  MainDef =
     NULL,
     MainMenu,
     M_DrawMainMenu,
-    97,64,
+    MAIN_MENU_ITEMS_START_X /*97*/,
+    MAIN_MENU_ITEMS_START_Y /*64*/,
     0
 };
 
@@ -272,6 +277,12 @@ menu_t  MainDef =
 //
 // EPISODE SELECT
 //
+
+// TODO: Add defines for Episode Menu
+
+
+#define EPI_MENU_ITEMS_START_X (SCREENWIDTH/2 - 112)
+
 enum
 {
     ep1,
@@ -302,6 +313,10 @@ menu_t  EpiDef =
 //
 // NEW GAME
 //
+
+#define NEW_GAME_MENU_ITEMS_XTART_X (SCREENWIDTH/2 - 112)
+#define NEW_GAME_MENU_ITEMS_XTART_Y (SCREENHEIGHT/2 - 37)
+
 enum
 {
     killthings,
@@ -327,7 +342,8 @@ menu_t  NewDef =
     &EpiDef,		// previous menu
     NewGameMenu,	// menuitem_t ->
     M_DrawNewGame,	// drawing routine ->
-    48,63,              // x,y
+    NEW_GAME_MENU_ITEMS_XTART_X /*48*/,
+    NEW_GAME_MENU_ITEMS_XTART_Y /*63*/, // x,y
     hurtme		// lastOn
 };
 
@@ -336,6 +352,10 @@ menu_t  NewDef =
 //
 // OPTIONS MENU
 //
+
+#define OPTIONS_MENU_START_X (SCREENWIDTH/2 - 100)
+#define OPTIONS_MENU_START_Y (SCREENHEIGHT/2 - 63)
+
 enum
 {
     endgame,
@@ -367,7 +387,8 @@ menu_t  OptionsDef =
     &MainDef,
     OptionsMenu,
     M_DrawOptions,
-    60,37,
+    OPTIONS_MENU_START_X /*60*/,
+    OPTIONS_MENU_START_Y /*37*/,
     0
 };
 
@@ -419,6 +440,10 @@ menu_t  ReadDef2 =
 //
 // SOUND VOLUME MENU
 //
+
+#define SOUND_VOLUME_MENU_X		(SCREENWIDTH/2 - 80)
+#define SOUND_VOLUME_MENU_Y		(SCREENHEIGHT/2 - 36)
+
 enum
 {
     sfx_vol,
@@ -436,19 +461,25 @@ menuitem_t SoundMenu[]=
     {-1,"",0}
 };
 
+
 menu_t  SoundDef =
 {
     sound_end,
     &OptionsDef,
     SoundMenu,
     M_DrawSound,
-    80,64,
+    SOUND_VOLUME_MENU_X/*80*/,
+    SOUND_VOLUME_MENU_Y/*64*/,
     0
 };
 
 //
 // LOAD GAME MENU
 //
+
+#define LOAD_GAME_MENU_X	(SCREENWIDTH/2 - 80)
+#define LOAD_GAME_MENU_Y	(SCREENHEIGHT/2 - 46)
+
 enum
 {
     load1,
@@ -476,13 +507,18 @@ menu_t  LoadDef =
     &MainDef,
     LoadMenu,
     M_DrawLoad,
-    80,54,
+    LOAD_GAME_MENU_X/*80*/,
+    LOAD_GAME_MENU_Y/*54*/,
     0
 };
 
 //
 // SAVE GAME MENU
 //
+
+#define SAVE_GAME_MENU_X	(SCREENWIDTH/2 - 80)
+#define SAVE_GAME_MENU_Y	(SCREENHEIGHT/2 - 46)
+
 menuitem_t SaveMenu[]=
 {
     {1,"", M_SaveSelect,'1'},
@@ -499,7 +535,8 @@ menu_t  SaveDef =
     &MainDef,
     SaveMenu,
     M_DrawSave,
-    80,54,
+    SAVE_GAME_MENU_X/*80*/,
+    SAVE_GAME_MENU_Y/*54*/,
     0
 };
 
@@ -539,11 +576,17 @@ void M_ReadSaveStrings(void)
 //
 // M_LoadGame & Cie.
 //
+
+#define LOAD_GAME_CAPT_HALF_WIDTH	88
+#define LOAD_GAME_CAPT_X			(SCREENWIDTH/2 - LOAD_GAME_CAPT_HALF_WIDTH)
+#define LOAD_GAME_CAPT_Y			(SCREENHEIGHT/2 - 72)
+
 void M_DrawLoad(void)
 {
     int             i;
-	
-    V_DrawPatchDirect (72,28,0,W_CacheLumpName("M_LOADG",PU_CACHE));
+
+    // Draw LOAD GAME caption
+    V_DrawPatchDirect (LOAD_GAME_CAPT_X/*72*/,LOAD_GAME_CAPT_Y/*28*/,0,W_CacheLumpName("M_LOADG",PU_CACHE));
     for (i = 0;i < load_end; i++)
     {
 	M_DrawSaveLoadBorder(LoadDef.x,LoadDef.y+LINEHEIGHT*i);
@@ -607,11 +650,17 @@ void M_LoadGame (int choice)
 //
 //  M_SaveGame & Cie.
 //
+
+#define SAVE_GAME_CAPT_HALF_WIDTH	88
+#define SAVE_GAME_CAPT_X			(SCREENWIDTH/2 - SAVE_GAME_CAPT_HALF_WIDTH)
+#define SAVE_GAME_CAPT_Y			(SCREENHEIGHT/2 - 72)
+
 void M_DrawSave(void)
 {
     int             i;
 	
-    V_DrawPatchDirect (72,28,0,W_CacheLumpName("M_SAVEG",PU_CACHE));
+    //Draw SAVE GAME capture
+    V_DrawPatchDirect (SAVE_GAME_CAPT_X/*72*/,SAVE_GAME_CAPT_Y/*28*/,0,W_CacheLumpName("M_SAVEG",PU_CACHE));
     for (i = 0;i < load_end; i++)
     {
 	M_DrawSaveLoadBorder(LoadDef.x,LoadDef.y+LINEHEIGHT*i);
@@ -797,9 +846,14 @@ void M_DrawReadThis2(void)
 //
 // Change Sfx & Music volumes
 //
+
+#define SOUND_VOLUME_CAPT_HALF_WIDTH	100
+#define SOUND_VOLUME_CAPT_X				(SCREENWIDTH/2 - SOUND_VOLUME_CAPT_HALF_WIDTH)
+#define SOUND_VOLUME_CAPT_Y				(SCREENHEIGHT/2 - 62)
+
 void M_DrawSound(void)
 {
-    V_DrawPatchDirect (60,38,0,W_CacheLumpName("M_SVOL",PU_CACHE));
+    V_DrawPatchDirect (SOUND_VOLUME_CAPT_X/*60*/,SOUND_VOLUME_CAPT_Y/*38*/,0,W_CacheLumpName("M_SVOL",PU_CACHE));
 
     M_DrawThermo(SoundDef.x,SoundDef.y+LINEHEIGHT*(sfx_vol+1),
 		 16,snd_SfxVolume);
@@ -853,9 +907,15 @@ void M_MusicVol(int choice)
 //
 // M_DrawMainMenu
 //
+
+#define MAIN_MENU_LOGO_HALF_WIDTH 	66
+#define MAIN_MENU_LOGO_X 			(SCREENWIDTH/2 - MAIN_MENU_LOGO_HALF_WIDTH)
+#define MAIN_MENU_LOGO_Y 			(SCREENHEIGHT/2 - 98)
+
 void M_DrawMainMenu(void)
 {
-    V_DrawPatchDirect (94,2,0,W_CacheLumpName("M_DOOM",PU_CACHE));
+	// Draw 'DOOM' logo on the top of the screen
+    V_DrawPatchDirect (MAIN_MENU_LOGO_X/*94*/,MAIN_MENU_LOGO_Y/*2*/,0,W_CacheLumpName("M_DOOM",PU_CACHE));
 }
 
 
@@ -864,10 +924,20 @@ void M_DrawMainMenu(void)
 //
 // M_NewGame
 //
+
+#define NEW_GAME_CAPT_HALF_WIDTH		64
+#define NEW_GAME_SKILL_CAPT_HALF_WIDTH	104
+#define NEW_GAME_CAPT_X					(SCREENWIDTH/2 - NEW_GAME_CAPT_HALF_WIDTH)
+#define NEW_GAME_CAPT_Y					(SCREENHEIGHT/2 - 86)
+#define NEW_GAME_SKILL_CAPT_X			(SCREENWIDTH/2 - NEW_GAME_SKILL_CAPT_HALF_WIDTH)
+#define NEW_GAME_SKILL_CAPT_Y			(SCREENHEIGHT/2 - 62)
+
 void M_DrawNewGame(void)
 {
-    V_DrawPatchDirect (96,14,0,W_CacheLumpName("M_NEWG",PU_CACHE));
-    V_DrawPatchDirect (54,38,0,W_CacheLumpName("M_SKILL",PU_CACHE));
+	// Draw `NEW GAME` caption
+    V_DrawPatchDirect (NEW_GAME_CAPT_X/*96*/,NEW_GAME_CAPT_Y/*14*/,0,W_CacheLumpName("M_NEWG",PU_CACHE));
+    // Draw `CHOOSE SKILL LEVEL` caption
+    V_DrawPatchDirect (NEW_GAME_SKILL_CAPT_X/*54*/,NEW_GAME_SKILL_CAPT_Y/*38*/,0,W_CacheLumpName("M_SKILL",PU_CACHE));
 }
 
 void M_NewGame(int choice)
@@ -888,6 +958,9 @@ void M_NewGame(int choice)
 //
 //      M_Episode
 //
+
+// TODO: To fix Episode Menu position
+
 int     epi;
 
 void M_DrawEpisode(void)
@@ -944,13 +1017,18 @@ void M_Episode(int choice)
 //
 // M_Options
 //
+
+#define OPTIONS_MENU_HALF_WIDTH	52
+#define OPTIONS_CAPT_X			(SCREENWIDTH/2 - OPTIONS_MENU_HALF_WIDTH)
+#define OPTIONS_CAPT_Y			(SCREENHEIGHT/2 - 85)
+
 char    detailNames[2][9]	= {"M_GDHIGH","M_GDLOW"};
 char	msgNames[2][9]		= {"M_MSGOFF","M_MSGON"};
 
-
 void M_DrawOptions(void)
 {
-    V_DrawPatchDirect (108,15,0,W_CacheLumpName("M_OPTTTL",PU_CACHE));
+	// Draw OPTIONS caption
+    V_DrawPatchDirect (OPTIONS_CAPT_X/*108*/,OPTIONS_CAPT_Y/*15*/,0,W_CacheLumpName("M_OPTTTL",PU_CACHE));
 	
     V_DrawPatchDirect (OptionsDef.x + 175,OptionsDef.y+LINEHEIGHT*detail,0,
 		       W_CacheLumpName(detailNames[detailLevel],PU_CACHE));
@@ -1752,7 +1830,7 @@ void M_Drawer (void)
     if (messageToPrint)
     {
 	start = 0;
-	y = 100 - M_StringHeight(messageString)/2;
+	y = SCREENHEIGHT/2 - M_StringHeight(messageString)/2;
 	while(*(messageString+start))
 	{
 	    for (i = 0;i < strlen(messageString+start);i++)
@@ -1770,7 +1848,7 @@ void M_Drawer (void)
 		start += i;
 	    }
 				
-	    x = 160 - M_StringWidth(string)/2;
+	    x = SCREENWIDTH/2 - M_StringWidth(string)/2;
 	    M_WriteText(x,y,string);
 	    y += SHORT(hu_font[0]->height);
 	}

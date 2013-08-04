@@ -83,11 +83,12 @@ rcsid[] = "$Id: st_stuff.c,v 1.6 1997/02/03 22:45:13 b1 Exp $";
 #define ST_TOGGLECHAT		KEY_ENTER
 
 // Location of status bar
-#define ST_X				0
+#define ST_X				(SCREENWIDTH/2 - ST_WIDTH/2)
 #define ST_X2				104
 
+#define ST_FHEIGHT		32
 #define ST_FX  			143
-#define ST_FY  			169
+#define ST_FY  			(SCREENHEIGHT+1)-ST_FHEIGHT //169
 
 // Should be set to patch width
 //  for tall numbers later on
@@ -114,8 +115,9 @@ rcsid[] = "$Id: st_stuff.c,v 1.6 1997/02/03 22:45:13 b1 Exp $";
 #define ST_GODFACE			(ST_NUMPAINFACES*ST_FACESTRIDE)
 #define ST_DEADFACE			(ST_GODFACE+1)
 
-#define ST_FACESX			143
-#define ST_FACESY			168
+#define ST_FACEHEIGHT		33
+#define ST_FACESX			ST_X + 143
+#define ST_FACESY			(SCREENHEIGHT+1)-ST_FACEHEIGHT//168
 
 #define ST_EVILGRINCOUNT		(2*TICRATE)
 #define ST_STRAIGHTFACECOUNT	(TICRATE/2)
@@ -134,108 +136,127 @@ rcsid[] = "$Id: st_stuff.c,v 1.6 1997/02/03 22:45:13 b1 Exp $";
 //       into a buffer,
 //       or into the frame buffer?
 
+#define ST_AMMOHIEGHT		30
+
 // AMMO number pos.
 #define ST_AMMOWIDTH		3	
-#define ST_AMMOX			44
-#define ST_AMMOY			171
+#define ST_AMMOX			ST_X + 44
+#define ST_AMMOY			(SCREENHEIGHT+1)-ST_AMMOHIEGHT //171
 
 // HEALTH number pos.
 #define ST_HEALTHWIDTH		3	
-#define ST_HEALTHX			90
-#define ST_HEALTHY			171
+#define ST_HEALTHX			ST_X + 90
+#define ST_HEALTHY			(SCREENHEIGHT+1)-ST_AMMOHIEGHT //171
 
 // Weapon pos.
-#define ST_ARMSX			111
-#define ST_ARMSY			172
-#define ST_ARMSBGX			104
-#define ST_ARMSBGY			168
+#define ST_ARMSHEIGHT		29
+#define ST_ARMSX			ST_X + 111
+#define ST_ARMSY			(SCREENHEIGHT+1)-ST_ARMSHEIGHT //172
+
+#define ST_ARMSBGHEIGHT		33
+#define ST_ARMSBGX			ST_X + 104
+#define ST_ARMSBGY			(SCREENHEIGHT+1)-ST_ARMSBGHEIGHT //168
 #define ST_ARMSXSPACE		12
 #define ST_ARMSYSPACE		10
 
 // Frags pos.
-#define ST_FRAGSX			138
-#define ST_FRAGSY			171	
+#define ST_FRAGSHEIGHT		30
+#define ST_FRAGSX			ST_X + 138
+#define ST_FRAGSY			(SCREENHEIGHT+1)-ST_FRAGSHEIGHT //171
 #define ST_FRAGSWIDTH		2
 
 // ARMOR number pos.
+#define ST_ARMORHEIGHT		30
 #define ST_ARMORWIDTH		3
-#define ST_ARMORX			221
-#define ST_ARMORY			171
+#define ST_ARMORX			ST_X + 221
+#define ST_ARMORY			(SCREENHEIGHT+1)-ST_ARMORHEIGHT
 
 // Key icon positions.
+#define ST_KEYHEIGHT		10
 #define ST_KEY0WIDTH		8
 #define ST_KEY0HEIGHT		5
-#define ST_KEY0X			239
-#define ST_KEY0Y			171
+#define ST_KEY0X			ST_X + 239
+#define ST_KEY0Y			(SCREENHEIGHT+1)-3*ST_KEYHEIGHT // 171
 #define ST_KEY1WIDTH		ST_KEY0WIDTH
-#define ST_KEY1X			239
-#define ST_KEY1Y			181
+#define ST_KEY1X			ST_X + 239
+#define ST_KEY1Y			(SCREENHEIGHT+1)-2*ST_KEYHEIGHT // 181
 #define ST_KEY2WIDTH		ST_KEY0WIDTH
-#define ST_KEY2X			239
-#define ST_KEY2Y			191
+#define ST_KEY2X			ST_X + 239
+#define ST_KEY2Y			(SCREENHEIGHT+1)-1*ST_KEYHEIGHT //191
 
 // Ammunition counter.
 #define ST_AMMO0WIDTH		3
 #define ST_AMMO0HEIGHT		6
-#define ST_AMMO0X			288
-#define ST_AMMO0Y			173
+#define ST_AMMO0H			28
+#define ST_AMMO0X			ST_X + 288
+#define ST_AMMO0Y			(SCREENHEIGHT+1)-ST_AMMO0H //173
+#define ST_AMMO1H			22
 #define ST_AMMO1WIDTH		ST_AMMO0WIDTH
-#define ST_AMMO1X			288
-#define ST_AMMO1Y			179
+#define ST_AMMO1X			ST_X + 288
+#define ST_AMMO1Y			(SCREENHEIGHT+1)-ST_AMMO1H //179
+#define ST_AMMO2H			10
 #define ST_AMMO2WIDTH		ST_AMMO0WIDTH
-#define ST_AMMO2X			288
-#define ST_AMMO2Y			191
+#define ST_AMMO2X			ST_X + 288
+#define ST_AMMO2Y			(SCREENHEIGHT+1)-ST_AMMO2H //191
+#define ST_AMMO3H			16
 #define ST_AMMO3WIDTH		ST_AMMO0WIDTH
-#define ST_AMMO3X			288
-#define ST_AMMO3Y			185
+#define ST_AMMO3X			ST_X + 288
+#define ST_AMMO3Y			(SCREENHEIGHT+1)-ST_AMMO3H //185
 
 // Indicate maximum ammunition.
 // Only needed because backpack exists.
 #define ST_MAXAMMO0WIDTH		3
 #define ST_MAXAMMO0HEIGHT		5
-#define ST_MAXAMMO0X		314
-#define ST_MAXAMMO0Y		173
+#define ST_MAXAMMO0X		ST_X + 314
+#define ST_MAXAMMO0Y		(SCREENHEIGHT+1)-ST_AMMO0H //173
 #define ST_MAXAMMO1WIDTH		ST_MAXAMMO0WIDTH
-#define ST_MAXAMMO1X		314
-#define ST_MAXAMMO1Y		179
+#define ST_MAXAMMO1X		ST_X + 314
+#define ST_MAXAMMO1Y		(SCREENHEIGHT+1)-ST_AMMO1H //179
 #define ST_MAXAMMO2WIDTH		ST_MAXAMMO0WIDTH
-#define ST_MAXAMMO2X		314
-#define ST_MAXAMMO2Y		191
+#define ST_MAXAMMO2X		ST_X + 314
+#define ST_MAXAMMO2Y		(SCREENHEIGHT+1)-ST_AMMO2H //191
 #define ST_MAXAMMO3WIDTH		ST_MAXAMMO0WIDTH
-#define ST_MAXAMMO3X		314
-#define ST_MAXAMMO3Y		185
+#define ST_MAXAMMO3X		ST_X + 314
+#define ST_MAXAMMO3Y		(SCREENHEIGHT+1)-ST_AMMO3H //185
 
 // pistol
-#define ST_WEAPON0X			110 
-#define ST_WEAPON0Y			172
+#define ST_WEAPON0HEIGHT	29
+#define ST_WEAPON0X			ST_X + 110
+#define ST_WEAPON0Y			(SCREENHEIGHT+1)-ST_WEAPON0HEIGHT //172
 
 // shotgun
-#define ST_WEAPON1X			122 
-#define ST_WEAPON1Y			172
+#define ST_WEAPON1HEIGHT	29
+#define ST_WEAPON1X			ST_X + 122
+#define ST_WEAPON1Y			(SCREENHEIGHT+1)-ST_AMMOHIEGHT //172
 
 // chain gun
+#define ST_WEAPON2HEIGHT	29
 #define ST_WEAPON2X			134 
-#define ST_WEAPON2Y			172
+#define ST_WEAPON2Y			(SCREENHEIGHT+1)-ST_AMMOHIEGHT //172
 
 // missile launcher
-#define ST_WEAPON3X			110 
-#define ST_WEAPON3Y			181
+#define ST_WEAPON3HEIGHT	20
+#define ST_WEAPON3X			ST_X + 110
+#define ST_WEAPON3Y			(SCREENHEIGHT+1)-ST_AMMOHIEGHT //181
 
 // plasma gun
-#define ST_WEAPON4X			122 
-#define ST_WEAPON4Y			181
+#define ST_WEAPON4HEIGHT	20
+#define ST_WEAPON4X			ST_X + 122
+#define ST_WEAPON4Y			(SCREENHEIGHT+1)-ST_AMMOHIEGHT //181
 
  // bfg
-#define ST_WEAPON5X			134
-#define ST_WEAPON5Y			181
+#define ST_WEAPON5HEIGHT	20
+#define ST_WEAPON5X			ST_X + 134
+#define ST_WEAPON5Y			(SCREENHEIGHT+1)-ST_AMMOHIEGHT //181
 
 // WPNS title
-#define ST_WPNSX			109 
-#define ST_WPNSY			191
+#define ST_WPNSHEIGTH		10
+#define ST_WPNSX			ST_X + 109
+#define ST_WPNSY			(SCREENHEIGHT+1)-10 //191
 
  // DETH title
-#define ST_DETHX			109
-#define ST_DETHY			191
+#define ST_DETHX			ST_X + 109
+#define ST_DETHY			(SCREENHEIGHT+1)-10 //191
 
 //Incoming messages window location
 //UNUSED
@@ -494,6 +515,9 @@ extern char*	mapnames[];
 //
 // STATUS BAR CODE
 //
+
+// TODO : To move the status bar to the center
+
 void ST_Stop(void);
 
 void ST_refreshBackground(void)
@@ -506,7 +530,7 @@ void ST_refreshBackground(void)
 	if (netgame)
 	    V_DrawPatch(ST_FX, 0, BG, faceback);
 
-	V_CopyRect(ST_X, 0, BG, ST_WIDTH, ST_HEIGHT, ST_X, ST_Y, FG);
+	V_CopyRect(ST_X, 0, BG, ST_WIDTH, ST_HEIGHT, ST_X , ST_Y, FG);
     }
 
 }
@@ -1463,9 +1487,17 @@ void ST_Stop (void)
     st_stopped = true;
 }
 
+
+/******************************************************************************/
+/*                              ST_Init                                       */
+/*                                                                            */
+/*  This function initializes buffer for the status bar drawing               */
+/*                                                                            */
+/******************************************************************************/
+
 void ST_Init (void)
 {
     veryfirsttime = 0;
     ST_loadData();
-    screens[4] = (byte *) Z_Malloc(ST_WIDTH*ST_HEIGHT, PU_STATIC, 0);
+    screens[4] = (byte *) Z_Malloc(SCREENWIDTH*ST_HEIGHT, PU_STATIC, 0);
 }

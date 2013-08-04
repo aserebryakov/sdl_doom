@@ -44,8 +44,9 @@ rcsid[] = "$Id: p_pspr.c,v 1.5 1997/02/03 22:45:12 b1 Exp $";
 #define LOWERSPEED		FRACUNIT*6
 #define RAISESPEED		FRACUNIT*6
 
-#define WEAPONBOTTOM	128*FRACUNIT
-#define WEAPONTOP		32*FRACUNIT
+// TODO: To find out what are initial values
+#define WEAPONBOTTOM	(SCREENHEIGHT/4)*4*FRACUNIT //128*FRACUNIT
+#define WEAPONTOP		(SCREENHEIGHT/4)*FRACUNIT //32*FRACUINT
 
 
 // plasma cells for a bfg attack

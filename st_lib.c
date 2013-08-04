@@ -120,8 +120,9 @@ STlib_drawNum
     x = n->x - numdigits*w;
 
     if (n->y - ST_Y < 0)
-	I_Error("drawNum: n->y - ST_Y < 0");
+	I_Error("drawNum: n->y - ST_Y < 0: n->y=%d: ST_Y=%d", n->y, ST_Y);
 
+    // Clear BG for digit drawing
     V_CopyRect(x, n->y - ST_Y, BG, w*numdigits, h, x, n->y, FG);
 
     // if non-number, do not draw it
@@ -279,7 +280,7 @@ STlib_updateBinIcon
 	h = SHORT(bi->p->height);
 
 	if (y - ST_Y < 0)
-	    I_Error("updateBinIcon: y - ST_Y < 0");
+	    I_Error("updateBinIcon: y - ST_Y < 0: y=%d: ST_Y=%d", y, ST_Y);
 
 	if (*bi->val)
 	    V_DrawPatch(bi->x, bi->y, FG, bi->p);

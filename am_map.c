@@ -135,10 +135,14 @@ typedef struct
     fpoint_t a, b;
 } fline_t;
 
-typedef struct
+struct mpoint_t
 {
+    // TODO: Write it as it should be
+    mpoint_t() = default;
+    mpoint_t(double _x, double _y) : x(_x), y(_y) {};
+    mpoint_t(fixed_t _x, fixed_t _y) : x(_x), y(_y) {};
     fixed_t		x,y;
-} mpoint_t;
+};
 
 typedef struct
 {
@@ -507,7 +511,7 @@ void AM_loadPics(void)
     for (i=0;i<10;i++)
     {
 	sprintf(namebuf, "AMMNUM%d", i);
-	marknums[i] = W_CacheLumpName(namebuf, PU_STATIC);
+	marknums[i] = static_cast<patch_t*>(W_CacheLumpName(namebuf, PU_STATIC));
     }
 
 }
@@ -559,7 +563,7 @@ void AM_LevelInit(void)
 //
 void AM_Stop (void)
 {
-    static event_t st_notify = { 0, ev_keyup, AM_MSGEXITED };
+    static event_t st_notify = { ev_default, ev_keyup, AM_MSGEXITED };
 
     AM_unloadPics();
     automapactive = false;

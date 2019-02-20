@@ -63,6 +63,7 @@ rcsid[] = "$Id: m_menu.c,v 1.7 1997/02/03 22:45:10 b1 Exp $";
 
 #include "m_menu.h"
 
+#include <functional>
 
 
 extern patch_t*		hu_font[HU_FONTSIZE];
@@ -102,7 +103,8 @@ int			messageLastMenuActive;
 // timed message = no input from user
 boolean			messageNeedsInput;     
 
-void    (*messageRoutine)(int response);
+using messageRoutine_t = std::function<void(int)>;
+messageRoutine_t messageRoutine;
 
 #define SAVESTRINGSIZE 	24
 
@@ -226,7 +228,7 @@ void M_WriteText(int x, int y, char *string);
 int  M_StringWidth(char *string);
 int  M_StringHeight(char *string);
 void M_StartControlPanel(void);
-void M_StartMessage(char *string,void *routine,boolean input);
+void M_StartMessage(char *string, messageRoutine_t routine, boolean input);
 void M_StopMessage(void);
 void M_ClearMenus (void);
 
@@ -555,7 +557,7 @@ void M_ReadSaveStrings(void)
     for (i = 0;i < load_end;i++)
     {
 	if (M_CheckParm("-cdrom"))
-	    sprintf(name,"c:\\doomdata\\"SAVEGAMENAME"%d.dsg",i);
+	    sprintf(name,"c:\\doomdata\\" SAVEGAMENAME "%d.dsg",i);
 	else
 	    sprintf(name,SAVEGAMENAME"%d.dsg",i);
 
@@ -626,7 +628,7 @@ void M_LoadSelect(int choice)
     char    name[256];
 	
     if (M_CheckParm("-cdrom"))
-	sprintf(name,"c:\\doomdata\\"SAVEGAMENAME"%d.dsg",choice);
+	sprintf(name,"c:\\doomdata\\" SAVEGAMENAME "%d.dsg",choice);
     else
 	sprintf(name,SAVEGAMENAME"%d.dsg",choice);
     G_LoadGame (name);
@@ -759,7 +761,7 @@ void M_QuickSave(void)
 	return;
     }
     sprintf(tempstring,QSPROMPT,savegamestrings[quickSaveSlot]);
-    M_StartMessage(tempstring,reinterpret_cast<void*>(M_QuickSaveResponse),true);
+    M_StartMessage(tempstring,M_QuickSaveResponse,true);
 }
 
 
@@ -791,7 +793,7 @@ void M_QuickLoad(void)
 	return;
     }
     sprintf(tempstring,QLPROMPT,savegamestrings[quickSaveSlot]);
-    M_StartMessage(tempstring, reinterpret_cast<void*>(M_QuickLoadResponse),true);
+    M_StartMessage(tempstring,M_QuickLoadResponse,true);
 }
 
 
@@ -976,18 +978,23 @@ void M_VerifyNightmare(int ch)
     if (ch != 'y')
 	return;
 		
-    G_DeferedInitNew(nightmare,epi+1,1);
+    // TODO: validate that it works
+    G_DeferedInitNew(sk_nightmare,epi+1,1);
     M_ClearMenus ();
 }
 
-void M_ChooseSkill(int choice)
+void M_ChooseSkill(int user_choice)
 {
-    if (choice == nightmare)
+    skill_t choice = static_cast<skill_t>(user_choice);
+
+    if (choice == sk_nightmare)
     {
-	M_StartMessage(NIGHTMARE,static_cast<void*>(M_VerifyNightmare),true);
+    // TODO: validate that it works
+	M_StartMessage(NIGHTMARE,M_VerifyNightmare,true);
 	return;
     }
 	
+    // TODO: validate that it works
     G_DeferedInitNew(choice,epi+1,1);
     M_ClearMenus ();
 }
@@ -1031,13 +1038,13 @@ char	msgNames[2][9]		= {"M_MSGOFF","M_MSGON"};
 void M_DrawOptions(void)
 {
 	// Draw OPTIONS caption
-    V_DrawPatchDirect (OPTIONS_CAPT_X/*108*/,OPTIONS_CAPT_Y/*15*/,0,W_CacheLumpName("M_OPTTTL",PU_CACHE));
+    V_DrawPatchDirect (OPTIONS_CAPT_X/*108*/,OPTIONS_CAPT_Y/*15*/,0,static_cast<patch_t*>(W_CacheLumpName("M_OPTTTL",PU_CACHE)));
 	
     V_DrawPatchDirect (OptionsDef.x + 175,OptionsDef.y+LINEHEIGHT*detail,0,
-		       W_CacheLumpName(detailNames[detailLevel],PU_CACHE));
+		       static_cast<patch_t*>(W_CacheLumpName(detailNames[detailLevel],PU_CACHE)));
 
     V_DrawPatchDirect (OptionsDef.x + 120,OptionsDef.y+LINEHEIGHT*messages,0,
-		       W_CacheLumpName(msgNames[showMessages],PU_CACHE));
+		       static_cast<patch_t*>(W_CacheLumpName(msgNames[showMessages],PU_CACHE)));
 
     M_DrawThermo(OptionsDef.x,OptionsDef.y+LINEHEIGHT*(mousesens+1),
 		 10,mouseSensitivity);
@@ -1181,9 +1188,9 @@ void M_QuitDOOM(int choice)
   // We pick index 0 which is language sensitive,
   //  or one at random, between 1 and maximum number.
   if (language != english )
-    sprintf(endstring,"%s\n\n"DOSY, endmsg[0] );
+    sprintf(endstring,"%s\n\n" DOSY, endmsg[0] );
   else
-    sprintf(endstring,"%s\n\n"DOSY, endmsg[ (gametic%(NUM_QUITMESSAGES-2))+1 ]);
+    sprintf(endstring,"%s\n\n" DOSY, endmsg[ (gametic%(NUM_QUITMESSAGES-2))+1 ]);
   
   M_StartMessage(endstring,M_QuitResponse,true);
 }
@@ -1270,17 +1277,17 @@ M_DrawThermo
     int		i;
 
     xx = x;
-    V_DrawPatchDirect (xx,y,0,W_CacheLumpName("M_THERML",PU_CACHE));
+    V_DrawPatchDirect (xx,y,0,static_cast<patch_t*>(W_CacheLumpName("M_THERML",PU_CACHE)));
     xx += 8;
     for (i=0;i<thermWidth;i++)
     {
-	V_DrawPatchDirect (xx,y,0,W_CacheLumpName("M_THERMM",PU_CACHE));
+	V_DrawPatchDirect (xx,y,0,static_cast<patch_t*>(W_CacheLumpName("M_THERMM",PU_CACHE)));
 	xx += 8;
     }
-    V_DrawPatchDirect (xx,y,0,W_CacheLumpName("M_THERMR",PU_CACHE));
+    V_DrawPatchDirect (xx,y,0,static_cast<patch_t*>(W_CacheLumpName("M_THERMR",PU_CACHE)));
 
     V_DrawPatchDirect ((x+8) + thermDot*8,y,
-		       0,W_CacheLumpName("M_THERMO",PU_CACHE));
+		       0,static_cast<patch_t*>(W_CacheLumpName("M_THERMO",PU_CACHE)));
 }
 
 
@@ -1291,7 +1298,7 @@ M_DrawEmptyCell
   int		item )
 {
     V_DrawPatchDirect (menu->x - 10,        menu->y+item*LINEHEIGHT - 1, 0,
-		       W_CacheLumpName("M_CELL1",PU_CACHE));
+		       static_cast<patch_t*>(W_CacheLumpName("M_CELL1",PU_CACHE)));
 }
 
 void
@@ -1300,14 +1307,14 @@ M_DrawSelCell
   int		item )
 {
     V_DrawPatchDirect (menu->x - 10,        menu->y+item*LINEHEIGHT - 1, 0,
-		       W_CacheLumpName("M_CELL2",PU_CACHE));
+		       static_cast<patch_t*>(W_CacheLumpName("M_CELL2",PU_CACHE)));
 }
 
 
 void
 M_StartMessage
 ( char*		string,
-  void*		routine,
+  messageRoutine_t routine,
   boolean	input )
 {
     messageLastMenuActive = menuactive;
@@ -1679,7 +1686,7 @@ boolean M_Responder (event_t* ev)
 	    if (usegamma > 4)
 		usegamma = 0;
 	    players[consoleplayer].message = gammamsg[usegamma];
-	    I_SetPalette (W_CacheLumpName ("PLAYPAL",PU_CACHE));
+	    I_SetPalette (static_cast<byte*>(W_CacheLumpName ("PLAYPAL",PU_CACHE)));
 	    return true;
 				
 	}
@@ -1873,14 +1880,14 @@ void M_Drawer (void)
     {
 	if (currentMenu->menuitems[i].name[0])
 	    V_DrawPatchDirect (x,y,0,
-			       W_CacheLumpName(currentMenu->menuitems[i].name ,PU_CACHE));
+			       static_cast<patch_t*>(W_CacheLumpName(currentMenu->menuitems[i].name ,PU_CACHE)));
 	y += LINEHEIGHT;
     }
 
     
     // DRAW SKULL
     V_DrawPatchDirect(x + SKULLXOFF,currentMenu->y - 5 + itemOn*LINEHEIGHT, 0,
-		      W_CacheLumpName(skullName[whichSkull],PU_CACHE));
+		      static_cast<patch_t*>(W_CacheLumpName(skullName[whichSkull],PU_CACHE)));
 
 }
 

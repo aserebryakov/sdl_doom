@@ -151,7 +151,7 @@ M_ReadFile
     if (fstat (handle,&fileinfo) == -1)
 	I_Error ("Couldn't read file %s", name);
     length = fileinfo.st_size;
-    buf = Z_Malloc (length, PU_STATIC, NULL);
+    buf = static_cast<byte*>(Z_Malloc (length, PU_STATIC, NULL));
     count = read (handle, buf, length);
     close (handle);
 	
@@ -254,15 +254,17 @@ default_t	defaults[] =
 
 // UNIX hack, to be removed. 
 #ifdef SNDSERV
-    {"sndserver", (int *) &sndserver_filename, (int) "sndserver"},
+    // TODO: uncomment as soon as I'll understand what is it supposed to do
+    // {"sndserver", (int *) &sndserver_filename, (int) "sndserver"},
     {"mb_used", &mb_used, 2},
 #endif
     
 #endif
 
 #ifdef LINUX
-    {"mousedev", (int*)&mousedev, (int)"/dev/ttyS0"},
-    {"mousetype", (int*)&mousetype, (int)"microsoft"},
+    // TODO: uncomment as soon as I'll understand what is it supposed to do
+    // {"mousedev", (int*)&mousedev, (int)"/dev/ttyS0"},
+    // {"mousetype", (int*)&mousetype, (int)"microsoft"},
 #endif
 
     {"use_mouse",&usemouse, 1},
@@ -285,16 +287,17 @@ default_t	defaults[] =
 
     {"usegamma",&usegamma, 0},
 
-    {"chatmacro0", (int *) &chat_macros[0], (int) HUSTR_CHATMACRO0 },
-    {"chatmacro1", (int *) &chat_macros[1], (int) HUSTR_CHATMACRO1 },
-    {"chatmacro2", (int *) &chat_macros[2], (int) HUSTR_CHATMACRO2 },
-    {"chatmacro3", (int *) &chat_macros[3], (int) HUSTR_CHATMACRO3 },
-    {"chatmacro4", (int *) &chat_macros[4], (int) HUSTR_CHATMACRO4 },
-    {"chatmacro5", (int *) &chat_macros[5], (int) HUSTR_CHATMACRO5 },
-    {"chatmacro6", (int *) &chat_macros[6], (int) HUSTR_CHATMACRO6 },
-    {"chatmacro7", (int *) &chat_macros[7], (int) HUSTR_CHATMACRO7 },
-    {"chatmacro8", (int *) &chat_macros[8], (int) HUSTR_CHATMACRO8 },
-    {"chatmacro9", (int *) &chat_macros[9], (int) HUSTR_CHATMACRO9 }
+    // TODO: uncomment as soon as I'll understand what is it supposed to do
+    // {"chatmacro0", (int *) &chat_macros[0], (int) HUSTR_CHATMACRO0 },
+    // {"chatmacro1", (int *) &chat_macros[1], (int) HUSTR_CHATMACRO1 },
+    // {"chatmacro2", (int *) &chat_macros[2], (int) HUSTR_CHATMACRO2 },
+    // {"chatmacro3", (int *) &chat_macros[3], (int) HUSTR_CHATMACRO3 },
+    // {"chatmacro4", (int *) &chat_macros[4], (int) HUSTR_CHATMACRO4 },
+    // {"chatmacro5", (int *) &chat_macros[5], (int) HUSTR_CHATMACRO5 },
+    // {"chatmacro6", (int *) &chat_macros[6], (int) HUSTR_CHATMACRO6 },
+    // {"chatmacro7", (int *) &chat_macros[7], (int) HUSTR_CHATMACRO7 },
+    // {"chatmacro8", (int *) &chat_macros[8], (int) HUSTR_CHATMACRO8 },
+    // {"chatmacro9", (int *) &chat_macros[9], (int) HUSTR_CHATMACRO9 }
 
 };
 
@@ -391,8 +394,10 @@ void M_LoadDefaults (void)
 			if (!isstring)
 			    *defaults[i].location = parm;
 			else
-			    *defaults[i].location =
-				(int) newstring;
+            {
+                // TODO: Uncomment as soon as I'll understand what does this mean
+                // *defaults[i].location = (int) newstring;
+            }
 			break;
 		    }
 	    }
@@ -451,7 +456,7 @@ WritePCXfile
     pcx_t*	pcx;
     byte*	pack;
 	
-    pcx = Z_Malloc (width*height*2+1000, PU_STATIC, NULL);
+    pcx = static_cast<pcx_t*>(Z_Malloc (width*height*2+1000, PU_STATIC, NULL));
 
     pcx->manufacturer = 0x0a;		// PCX id
     pcx->version = 5;			// 256 color
@@ -526,7 +531,7 @@ void M_ScreenShot (void)
     // save the pcx file
     WritePCXfile (lbmname, linear,
 		  SCREENWIDTH, SCREENHEIGHT,
-		  W_CacheLumpName ("PLAYPAL",PU_CACHE));
+		  static_cast<byte*>(W_CacheLumpName ("PLAYPAL",PU_CACHE)));
 	
     players[consoleplayer].message = "screen shot";
 }

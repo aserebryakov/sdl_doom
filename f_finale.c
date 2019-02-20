@@ -271,7 +271,7 @@ void F_TextWrite (void)
     int		cy;
     
     // erase the entire screen to a tiled background
-    src = W_CacheLumpName ( finaleflat , PU_CACHE);
+    src = static_cast<byte*>(W_CacheLumpName ( finaleflat , PU_CACHE));
     dest = screens[0];
 	
     for (y=0 ; y<SCREENHEIGHT ; y++)
@@ -356,7 +356,8 @@ castinfo_t	castorder[] = {
     {CC_CYBER, MT_CYBORG},
     {CC_HERO, MT_PLAYER},
 
-    {NULL,0}
+    // TODO: Fix this static cast
+    {NULL, static_cast<mobjtype_t>(0)}
 };
 
 int		castnum;
@@ -585,7 +586,7 @@ void F_CastDrawer (void)
     patch_t*		patch;
     
     // erase the entire screen to a background
-    V_DrawPatch (0,0,0, W_CacheLumpName ("BOSSBACK", PU_CACHE));
+    V_DrawPatch (0,0,0, static_cast<patch_t*>(W_CacheLumpName ("BOSSBACK", PU_CACHE)));
 
     F_CastPrint (castorder[castnum].name);
     
@@ -595,7 +596,7 @@ void F_CastDrawer (void)
     lump = sprframe->lump[0];
     flip = (boolean)sprframe->flip[0];
 			
-    patch = W_CacheLumpNum (lump+firstspritelump, PU_CACHE);
+    patch = static_cast<patch_t*>(W_CacheLumpNum (lump+firstspritelump, PU_CACHE));
     if (flip)
 	V_DrawPatchFlipped (160,170,0,patch);
     else
@@ -651,8 +652,8 @@ void F_BunnyScroll (void)
     int		stage;
     static int	laststage;
 		
-    p1 = W_CacheLumpName ("PFUB2", PU_LEVEL);
-    p2 = W_CacheLumpName ("PFUB1", PU_LEVEL);
+    p1 = static_cast<patch_t*>(W_CacheLumpName ("PFUB2", PU_LEVEL));
+    p2 = static_cast<patch_t*>(W_CacheLumpName ("PFUB1", PU_LEVEL));
 
     V_MarkRect (0, 0, SCREENWIDTH, SCREENHEIGHT);
 	
@@ -675,7 +676,7 @@ void F_BunnyScroll (void)
     if (finalecount < 1180)
     {
 	V_DrawPatch ((SCREENWIDTH-13*8)/2,
-		     (SCREENHEIGHT-8*8)/2,0, W_CacheLumpName ("END0",PU_CACHE));
+		     (SCREENHEIGHT-8*8)/2,0, static_cast<patch_t*>(W_CacheLumpName ("END0",PU_CACHE)));
 	laststage = 0;
 	return;
     }
@@ -690,7 +691,7 @@ void F_BunnyScroll (void)
     }
 	
     sprintf (name,"END%i",stage);
-    V_DrawPatch ((SCREENWIDTH-13*8)/2, (SCREENHEIGHT-8*8)/2,0, W_CacheLumpName (name,PU_CACHE));
+    V_DrawPatch ((SCREENWIDTH-13*8)/2, (SCREENHEIGHT-8*8)/2,0, static_cast<patch_t*>(W_CacheLumpName (name,PU_CACHE)));
 }
 
 
@@ -714,21 +715,21 @@ void F_Drawer (void)
 	  case 1:
 	    if ( gamemode == retail )
 	      V_DrawPatch (0,0,0,
-			 W_CacheLumpName("CREDIT",PU_CACHE));
+			 static_cast<patch_t*>(W_CacheLumpName("CREDIT",PU_CACHE)));
 	    else
 	      V_DrawPatch (0,0,0,
-			 W_CacheLumpName("HELP2",PU_CACHE));
+			 static_cast<patch_t*>(W_CacheLumpName("HELP2",PU_CACHE)));
 	    break;
 	  case 2:
 	    V_DrawPatch(0,0,0,
-			W_CacheLumpName("VICTORY2",PU_CACHE));
+			static_cast<patch_t*>(W_CacheLumpName("VICTORY2",PU_CACHE)));
 	    break;
 	  case 3:
 	    F_BunnyScroll ();
 	    break;
 	  case 4:
 	    V_DrawPatch (0,0,0,
-			 W_CacheLumpName("ENDPIC",PU_CACHE));
+			 static_cast<patch_t*>(W_CacheLumpName("ENDPIC",PU_CACHE)));
 	    break;
 	}
     }

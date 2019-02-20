@@ -1160,7 +1160,7 @@ extern char *sprnames[NUMSPRITES];
 
 
 
-typedef enum {
+enum  mobjtype_t {
     MT_PLAYER,
     MT_POSSESSED,
     MT_SHOTGUY,
@@ -1300,7 +1300,7 @@ typedef enum {
     MT_MISC86,
     NUMMOBJTYPES
 
-} mobjtype_t;
+};
 
 typedef struct
 {

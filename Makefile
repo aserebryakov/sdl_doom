@@ -4,9 +4,9 @@
 #
 # $Log:$
 #
-CC=  gcc # gcc or g++
+CC=  g++ # gcc or g++
 
-CFLAGS=-m32 -g -Wall -DNORMALUNIX -DLINUX -DSDL # -DUSEASM 
+CFLAGS=-g -Wall -DNORMALUNIX -DLINUX -DSDL -std=c++14 # -DUSEASM 
 LDFLAGS=-L/usr/lib/i386-linux-gnu/
 LIBS=-lSDL -lm # -lnsl
 

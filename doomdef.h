@@ -126,13 +126,14 @@ typedef enum
 // The current state of the game: whether we are
 // playing, gazing at the intermission screen,
 // the game final animation, or a demo. 
-typedef enum
+enum gamestate_t
 {
+    GS_WIPE,
     GS_LEVEL,
     GS_INTERMISSION,
     GS_FINALE,
     GS_DEMOSCREEN
-} gamestate_t;
+};
 
 //
 // Difficulty/skill settings/filters.
@@ -146,14 +147,14 @@ typedef enum
 // Deaf monsters/do not react to sound.
 #define	MTF_AMBUSH		8
 
-typedef enum
+enum skill_t
 {
     sk_baby,
     sk_easy,
     sk_medium,
     sk_hard,
     sk_nightmare
-} skill_t;
+};
 
 
 

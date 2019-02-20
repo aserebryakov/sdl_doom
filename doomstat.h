@@ -35,6 +35,7 @@
 
 // We need the playr data structure as well.
 #include "d_player.h"
+#include <memory>
 
 
 #ifdef __GNUG__
@@ -271,7 +272,7 @@ extern int		skyflatnum;
 // Netgame stuff (buffers and pointers, i.e. indices).
 
 // This is ???
-extern  doomcom_t*	doomcom;
+extern  std::unique_ptr<doomcom_t> doomcom;
 
 // This points inside doomcom.
 extern  doomdata_t*	netbuffer;	

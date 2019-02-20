@@ -317,7 +317,7 @@ menu_t  EpiDef =
 #define NEW_GAME_MENU_ITEMS_XTART_X (SCREENWIDTH/2 - 112)
 #define NEW_GAME_MENU_ITEMS_XTART_Y (SCREENHEIGHT/2 - 37)
 
-enum
+enum newgame_e
 {
     killthings,
     toorough,
@@ -325,7 +325,7 @@ enum
     violence,
     nightmare,
     newg_end
-} newgame_e;
+};
 
 menuitem_t NewGameMenu[]=
 {
@@ -586,7 +586,9 @@ void M_DrawLoad(void)
     int             i;
 
     // Draw LOAD GAME caption
-    V_DrawPatchDirect (LOAD_GAME_CAPT_X/*72*/,LOAD_GAME_CAPT_Y/*28*/,0,W_CacheLumpName("M_LOADG",PU_CACHE));
+    V_DrawPatchDirect (LOAD_GAME_CAPT_X/*72*/,LOAD_GAME_CAPT_Y/*28*/,0,Wstatic_cast<patch_t*>(W_CacheLumpName("M_LOADG",PU_CACHE)));
+	
+    V_DrawPatchDirect (72,28,0, static_cast<patch_t*>(W_CacheLumpName("M_LOADG",PU_CACHE)));
     for (i = 0;i < load_end; i++)
     {
 	M_DrawSaveLoadBorder(LoadDef.x,LoadDef.y+LINEHEIGHT*i);
@@ -603,15 +605,15 @@ void M_DrawSaveLoadBorder(int x,int y)
 {
     int             i;
 	
-    V_DrawPatchDirect (x-8,y+7,0,W_CacheLumpName("M_LSLEFT",PU_CACHE));
+    V_DrawPatchDirect (x-8,y+7,0,static_cast<patch_t*>(W_CacheLumpName("M_LSLEFT",PU_CACHE)));
 	
     for (i = 0;i < 24;i++)
     {
-	V_DrawPatchDirect (x,y+7,0,W_CacheLumpName("M_LSCNTR",PU_CACHE));
+	V_DrawPatchDirect (x,y+7,0,static_cast<patch_t*>(W_CacheLumpName("M_LSCNTR",PU_CACHE)));
 	x += 8;
     }
 
-    V_DrawPatchDirect (x,y+7,0,W_CacheLumpName("M_LSRGHT",PU_CACHE));
+    V_DrawPatchDirect (x,y+7,0,static_cast<patch_t*>(W_CacheLumpName("M_LSRGHT",PU_CACHE)));
 }
 
 
@@ -660,7 +662,8 @@ void M_DrawSave(void)
     int             i;
 	
     //Draw SAVE GAME capture
-    V_DrawPatchDirect (SAVE_GAME_CAPT_X/*72*/,SAVE_GAME_CAPT_Y/*28*/,0,W_CacheLumpName("M_SAVEG",PU_CACHE));
+    V_DrawPatchDirect (SAVE_GAME_CAPT_X/*72*/,SAVE_GAME_CAPT_Y/*28*/,0,Wstatic_cast<patch_t*>(W_CacheLumpName("M_SAVEG",PU_CACHE)));
+
     for (i = 0;i < load_end; i++)
     {
 	M_DrawSaveLoadBorder(LoadDef.x,LoadDef.y+LINEHEIGHT*i);
@@ -756,7 +759,7 @@ void M_QuickSave(void)
 	return;
     }
     sprintf(tempstring,QSPROMPT,savegamestrings[quickSaveSlot]);
-    M_StartMessage(tempstring,M_QuickSaveResponse,true);
+    M_StartMessage(tempstring,reinterpret_cast<void*>(M_QuickSaveResponse),true);
 }
 
 
@@ -788,7 +791,7 @@ void M_QuickLoad(void)
 	return;
     }
     sprintf(tempstring,QLPROMPT,savegamestrings[quickSaveSlot]);
-    M_StartMessage(tempstring,M_QuickLoadResponse,true);
+    M_StartMessage(tempstring, reinterpret_cast<void*>(M_QuickLoadResponse),true);
 }
 
 
@@ -804,12 +807,12 @@ void M_DrawReadThis1(void)
     switch ( gamemode )
     {
       case commercial:
-	V_DrawPatchDirect (0,0,0,W_CacheLumpName("HELP",PU_CACHE));
+	V_DrawPatchDirect (0,0,0, static_cast<patch_t*>(W_CacheLumpName("HELP",PU_CACHE)));
 	break;
       case shareware:
       case registered:
       case retail:
-	V_DrawPatchDirect (0,0,0,W_CacheLumpName("HELP1",PU_CACHE));
+	V_DrawPatchDirect (0,0,0, static_cast<patch_t*>(W_CacheLumpName("HELP1",PU_CACHE)));
 	break;
       default:
 	break;
@@ -830,11 +833,11 @@ void M_DrawReadThis2(void)
       case retail:
       case commercial:
 	// This hack keeps us from having to change menus.
-	V_DrawPatchDirect (0,0,0,W_CacheLumpName("CREDIT",PU_CACHE));
+	V_DrawPatchDirect (0,0,0, static_cast<patch_t*>(W_CacheLumpName("CREDIT",PU_CACHE)));
 	break;
       case shareware:
       case registered:
-	V_DrawPatchDirect (0,0,0,W_CacheLumpName("HELP2",PU_CACHE));
+	V_DrawPatchDirect (0,0,0, static_cast<patch_t*>(W_CacheLumpName("HELP2",PU_CACHE)));
 	break;
       default:
 	break;
@@ -853,7 +856,7 @@ void M_DrawReadThis2(void)
 
 void M_DrawSound(void)
 {
-    V_DrawPatchDirect (SOUND_VOLUME_CAPT_X/*60*/,SOUND_VOLUME_CAPT_Y/*38*/,0,W_CacheLumpName("M_SVOL",PU_CACHE));
+    V_DrawPatchDirect (SOUND_VOLUME_CAPT_X/*60*/,SOUND_VOLUME_CAPT_Y/*38*/,0,Wstatic_cast<patch_t*>(_CacheLumpName("M_SVOL",PU_CACHE)));
 
     M_DrawThermo(SoundDef.x,SoundDef.y+LINEHEIGHT*(sfx_vol+1),
 		 16,snd_SfxVolume);
@@ -915,7 +918,7 @@ void M_MusicVol(int choice)
 void M_DrawMainMenu(void)
 {
 	// Draw 'DOOM' logo on the top of the screen
-    V_DrawPatchDirect (MAIN_MENU_LOGO_X/*94*/,MAIN_MENU_LOGO_Y/*2*/,0,W_CacheLumpName("M_DOOM",PU_CACHE));
+    V_DrawPatchDirect (MAIN_MENU_LOGO_X/*94*/,MAIN_MENU_LOGO_Y/*2*/,0,Wstatic_cast<patch_t*>(_CacheLumpName("M_DOOM",PU_CACHE)));
 }
 
 
@@ -935,9 +938,9 @@ void M_DrawMainMenu(void)
 void M_DrawNewGame(void)
 {
 	// Draw `NEW GAME` caption
-    V_DrawPatchDirect (NEW_GAME_CAPT_X/*96*/,NEW_GAME_CAPT_Y/*14*/,0,W_CacheLumpName("M_NEWG",PU_CACHE));
+    V_DrawPatchDirect (NEW_GAME_CAPT_X/*96*/,NEW_GAME_CAPT_Y/*14*/,0,static_cast<patch_t*>(W_CacheLumpName("M_NEWG",PU_CACHE)));
     // Draw `CHOOSE SKILL LEVEL` caption
-    V_DrawPatchDirect (NEW_GAME_SKILL_CAPT_X/*54*/,NEW_GAME_SKILL_CAPT_Y/*38*/,0,W_CacheLumpName("M_SKILL",PU_CACHE));
+    V_DrawPatchDirect (NEW_GAME_SKILL_CAPT_X/*54*/,NEW_GAME_SKILL_CAPT_Y/*38*/,0,static_cast<patch_t*>(W_CacheLumpName("M_SKILL",PU_CACHE)));
 }
 
 void M_NewGame(int choice)
@@ -965,7 +968,7 @@ int     epi;
 
 void M_DrawEpisode(void)
 {
-    V_DrawPatchDirect (54,38,0,W_CacheLumpName("M_EPISOD",PU_CACHE));
+    V_DrawPatchDirect (54,38,0, static_cast<patch_t*>(W_CacheLumpName("M_EPISOD",PU_CACHE)));
 }
 
 void M_VerifyNightmare(int ch)
@@ -981,7 +984,7 @@ void M_ChooseSkill(int choice)
 {
     if (choice == nightmare)
     {
-	M_StartMessage(NIGHTMARE,M_VerifyNightmare,true);
+	M_StartMessage(NIGHTMARE,static_cast<void*>(M_VerifyNightmare),true);
 	return;
     }
 	

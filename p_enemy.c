@@ -643,7 +643,7 @@ void A_Look (mobj_t* actor)
 	    S_StartSound (actor, sound);
     }
 
-    P_SetMobjState (actor, actor->info->seestate);
+    P_SetMobjState (actor, static_cast<statenum_t>(actor->info->seestate));
 }
 
 
@@ -691,7 +691,7 @@ void A_Chase (mobj_t*	actor)
 	if (P_LookForPlayers(actor,true))
 	    return; 	// got a new target
 	
-	P_SetMobjState (actor, actor->info->spawnstate);
+	P_SetMobjState (actor, static_cast<statenum_t>(actor->info->spawnstate));
 	return;
     }
     
@@ -711,7 +711,7 @@ void A_Chase (mobj_t*	actor)
 	if (actor->info->attacksound)
 	    S_StartSound (actor, actor->info->attacksound);
 
-	P_SetMobjState (actor, actor->info->meleestate);
+	P_SetMobjState (actor, static_cast<statenum_t>(actor->info->meleestate));
 	return;
     }
     
@@ -727,7 +727,7 @@ void A_Chase (mobj_t*	actor)
 	if (!P_CheckMissileRange (actor))
 	    goto nomissile;
 	
-	P_SetMobjState (actor, actor->info->missilestate);
+	P_SetMobjState (actor, static_cast<statenum_t>(actor->info->missilestate));
 	actor->flags |= MF_JUSTATTACKED;
 	return;
     }
@@ -857,7 +857,7 @@ void A_CPosRefire (mobj_t* actor)
 	|| actor->target->health <= 0
 	|| !P_CheckSight (actor, actor->target) )
     {
-	P_SetMobjState (actor, actor->info->seestate);
+	P_SetMobjState (actor, static_cast<statenum_t>(actor->info->seestate));
     }
 }
 

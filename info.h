@@ -1299,25 +1299,24 @@ enum  mobjtype_t {
     MT_MISC85,
     MT_MISC86,
     NUMMOBJTYPES
-
 };
 
-typedef struct
+struct mobjinfo_t
 {
     int	doomednum;
-    int	spawnstate;
+   	statenum_t spawnstate;
     int	spawnhealth;
-    int	seestate;
+    statenum_t seestate;
     int	seesound;
     int	reactiontime;
     int	attacksound;
-    int	painstate;
+    statenum_t painstate;
     int	painchance;
     int	painsound;
     int	meleestate;
     int	missilestate;
-    int	deathstate;
-    int	xdeathstate;
+    statenum_t deathstate;
+    statenum_t xdeathstate;
     int	deathsound;
     int	speed;
     int	radius;
@@ -1326,9 +1325,9 @@ typedef struct
     int	damage;
     int	activesound;
     int	flags;
-    int	raisestate;
+    statenum_t raisestate;
 
-} mobjinfo_t;
+};
 
 extern mobjinfo_t mobjinfo[NUMMOBJTYPES];
 

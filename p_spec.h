@@ -259,14 +259,13 @@ void P_InitSwitchList(void);
 //
 // P_PLATS
 //
-typedef enum
+enum plat_e
 {
     up,
     down,
     waiting,
     in_stasis
-
-} plat_e;
+};
 
 
 

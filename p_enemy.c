@@ -47,23 +47,6 @@ rcsid[] = "$Id: p_enemy.c,v 1.5 1997/02/03 22:45:11 b1 Exp $";
 
 
 
-
-typedef enum
-{
-    DI_EAST,
-    DI_NORTHEAST,
-    DI_NORTH,
-    DI_NORTHWEST,
-    DI_WEST,
-    DI_SOUTHWEST,
-    DI_SOUTH,
-    DI_SOUTHEAST,
-    DI_NODIR,
-    NUMDIRS
-    
-} dirtype_t;
-
-
 //
 // P_NewChaseDir related LUT.
 //
@@ -367,7 +350,7 @@ void P_NewChaseDir (mobj_t*	actor)
     
     dirtype_t	d[3];
     
-    int		tdir;
+    int tdir;
     dirtype_t	olddir;
     
     dirtype_t	turnaround;
@@ -410,7 +393,7 @@ void P_NewChaseDir (mobj_t*	actor)
     {
 	tdir=d[1];
 	d[1]=d[2];
-	d[2]=tdir;
+	d[2]= static_cast<dirtype_t>(tdir);
     }
 
     if (d[1]==turnaround)
@@ -455,7 +438,7 @@ void P_NewChaseDir (mobj_t*	actor)
 	{
 	    if (tdir!=turnaround)
 	    {
-		actor->movedir =tdir;
+		actor->movedir = static_cast<dirtype_t>(tdir);
 		
 		if ( P_TryWalk(actor) )
 		    return;
@@ -470,7 +453,7 @@ void P_NewChaseDir (mobj_t*	actor)
 	{
 	    if (tdir!=turnaround)
 	    {
-		actor->movedir =tdir;
+		actor->movedir = static_cast<dirtype_t>(tdir);
 		
 		if ( P_TryWalk(actor) )
 		    return;

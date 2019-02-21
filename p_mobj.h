@@ -203,8 +203,22 @@ typedef enum
 } mobjflag_t;
 
 
+enum dirtype_t
+{
+    DI_EAST,
+    DI_NORTHEAST,
+    DI_NORTH,
+    DI_NORTHWEST,
+    DI_WEST,
+    DI_SOUTHWEST,
+    DI_SOUTH,
+    DI_SOUTHEAST,
+    DI_NODIR,
+    NUMDIRS
+};
+
 // Map Object definition.
-typedef struct mobj_s
+struct mobj_t
 {
     // List: thinker links.
     thinker_t		thinker;
@@ -215,8 +229,8 @@ typedef struct mobj_s
     fixed_t		z;
 
     // More list: links in sector (if needed)
-    struct mobj_s*	snext;
-    struct mobj_s*	sprev;
+    mobj_t*	snext;
+    mobj_t*	sprev;
 
     //More drawing info: to determine current sprite.
     angle_t		angle;	// orientation
@@ -225,8 +239,8 @@ typedef struct mobj_s
 
     // Interaction info, by BLOCKMAP.
     // Links in blocks (if needed).
-    struct mobj_s*	bnext;
-    struct mobj_s*	bprev;
+    mobj_t*	bnext;
+    mobj_t*	bprev;
     
     struct subsector_s*	subsector;
 
@@ -255,12 +269,12 @@ typedef struct mobj_s
     int			health;
 
     // Movement direction, movement generation (zig-zagging).
-    int			movedir;	// 0-7
+    dirtype_t movedir;	// 0-7
     int			movecount;	// when 0, select a new dir
 
     // Thing being chased/attacked (or NULL),
     // also the originator for missiles.
-    struct mobj_s*	target;
+    mobj_t*	target;
 
     // Reaction time: if non 0, don't attack yet.
     // Used by player to freeze a bit after teleporting.
@@ -281,10 +295,12 @@ typedef struct mobj_s
     mapthing_t		spawnpoint;	
 
     // Thing being chased/attacked for tracers.
-    struct mobj_s*	tracer;	
-    
-} mobj_t;
+    mobj_t*	tracer;	
+};
 
+
+// TODO: Remove in future. Added only to make things compile.
+using mobj_s = mobj_t;
 
 
 #endif

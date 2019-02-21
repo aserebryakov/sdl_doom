@@ -588,7 +588,7 @@ void M_DrawLoad(void)
     int             i;
 
     // Draw LOAD GAME caption
-    V_DrawPatchDirect (LOAD_GAME_CAPT_X/*72*/,LOAD_GAME_CAPT_Y/*28*/,0,Wstatic_cast<patch_t*>(W_CacheLumpName("M_LOADG",PU_CACHE)));
+    V_DrawPatchDirect (LOAD_GAME_CAPT_X/*72*/,LOAD_GAME_CAPT_Y/*28*/,0,static_cast<patch_t*>(W_CacheLumpName("M_LOADG",PU_CACHE)));
 	
     V_DrawPatchDirect (72,28,0, static_cast<patch_t*>(W_CacheLumpName("M_LOADG",PU_CACHE)));
     for (i = 0;i < load_end; i++)
@@ -664,7 +664,7 @@ void M_DrawSave(void)
     int             i;
 	
     //Draw SAVE GAME capture
-    V_DrawPatchDirect (SAVE_GAME_CAPT_X/*72*/,SAVE_GAME_CAPT_Y/*28*/,0,Wstatic_cast<patch_t*>(W_CacheLumpName("M_SAVEG",PU_CACHE)));
+    V_DrawPatchDirect (SAVE_GAME_CAPT_X/*72*/,SAVE_GAME_CAPT_Y/*28*/,0,static_cast<patch_t*>(W_CacheLumpName("M_SAVEG",PU_CACHE)));
 
     for (i = 0;i < load_end; i++)
     {
@@ -858,7 +858,7 @@ void M_DrawReadThis2(void)
 
 void M_DrawSound(void)
 {
-    V_DrawPatchDirect (SOUND_VOLUME_CAPT_X/*60*/,SOUND_VOLUME_CAPT_Y/*38*/,0,Wstatic_cast<patch_t*>(_CacheLumpName("M_SVOL",PU_CACHE)));
+    V_DrawPatchDirect (SOUND_VOLUME_CAPT_X/*60*/,SOUND_VOLUME_CAPT_Y/*38*/,0,static_cast<patch_t*>(W_CacheLumpName("M_SVOL",PU_CACHE)));
 
     M_DrawThermo(SoundDef.x,SoundDef.y+LINEHEIGHT*(sfx_vol+1),
 		 16,snd_SfxVolume);
@@ -920,7 +920,7 @@ void M_MusicVol(int choice)
 void M_DrawMainMenu(void)
 {
 	// Draw 'DOOM' logo on the top of the screen
-    V_DrawPatchDirect (MAIN_MENU_LOGO_X/*94*/,MAIN_MENU_LOGO_Y/*2*/,0,Wstatic_cast<patch_t*>(_CacheLumpName("M_DOOM",PU_CACHE)));
+    V_DrawPatchDirect (MAIN_MENU_LOGO_X/*94*/,MAIN_MENU_LOGO_Y/*2*/,0,static_cast<patch_t*>(W_CacheLumpName("M_DOOM",PU_CACHE)));
 }
 
 

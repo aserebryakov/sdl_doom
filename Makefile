@@ -7,7 +7,7 @@
 CC=  g++ # gcc or g++
 
 CFLAGS=-g -Wall -DNORMALUNIX -DLINUX -DSDL -std=c++14 # -DUSEASM 
-LDFLAGS=-L/usr/lib/i386-linux-gnu/
+LDFLAGS= # -L/usr/lib/i386-linux-gnu/
 LIBS=-lSDL -lm # -lnsl
 
 # subdirectory for objects

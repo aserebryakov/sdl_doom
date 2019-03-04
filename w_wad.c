@@ -196,7 +196,7 @@ void W_AddFile (char *filename)
 	header.numlumps = LONG(header.numlumps);
 	header.infotableofs = LONG(header.infotableofs);
 	length = header.numlumps*sizeof(filelump_t);
-	fileinfo = alloca (length);
+	fileinfo = static_cast<filelump_t*>(alloca (length));
 	lseek (handle, header.infotableofs, SEEK_SET);
 	read (handle, fileinfo, length);
 	numlumps += header.numlumps;
@@ -204,7 +204,7 @@ void W_AddFile (char *filename)
 
     
     // Fill in lumpinfo
-    lumpinfo = realloc (lumpinfo, numlumps*sizeof(lumpinfo_t));
+    lumpinfo = static_cast<lumpinfo_t*>(realloc (lumpinfo, numlumps*sizeof(lumpinfo_t)));
 
     if (!lumpinfo)
 	I_Error ("Couldn't realloc lumpinfo");
@@ -253,7 +253,7 @@ void W_Reload (void)
     lumpcount = LONG(header.numlumps);
     header.infotableofs = LONG(header.infotableofs);
     length = lumpcount*sizeof(filelump_t);
-    fileinfo = alloca (length);
+    fileinfo = static_cast<filelump_t*>(alloca (length));
     lseek (handle, header.infotableofs, SEEK_SET);
     read (handle, fileinfo, length);
     
@@ -297,7 +297,7 @@ void W_InitMultipleFiles (char** filenames)
     numlumps = 0;
 
     // will be realloced as lumps are added
-    lumpinfo = malloc(1);	
+    lumpinfo = static_cast<lumpinfo_t*>(malloc(1));	
 
     for ( ; *filenames ; filenames++)
 	W_AddFile (*filenames);
@@ -307,7 +307,7 @@ void W_InitMultipleFiles (char** filenames)
     
     // set up caching
     size = numlumps * sizeof(*lumpcache);
-    lumpcache = malloc (size);
+    lumpcache = static_cast<void**>(malloc (size));
     
     if (!lumpcache)
 	I_Error ("Couldn't allocate lumpcache");
@@ -487,7 +487,7 @@ W_CacheLumpNum
 	// read the lump in
 	
 	//printf ("cache miss on lump %i\n",lump);
-	ptr = Z_Malloc (W_LumpLength (lump), tag, &lumpcache[lump]);
+	ptr = static_cast<byte*>(Z_Malloc (W_LumpLength (lump), tag, &lumpcache[lump]));
 	W_ReadLump (lump, lumpcache[lump]);
     }
     else

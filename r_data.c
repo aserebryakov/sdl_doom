@@ -87,7 +87,13 @@ typedef struct
     boolean		masked;	
     short		width;
     short		height;
-    void		**columndirectory;	// OBSOLETE
+
+    /**
+     * This is a padding instead of pointer that was placed here before
+     * that due to change of poiter size on 64-bit caused crash
+     */
+    int padding;
+
     short		patchcount;
     mappatch_t	patches[1];
 } maptexture_t;

@@ -38,16 +38,22 @@
 //  we will need to handle the various
 //  action functions cleanly.
 //
+struct mobj_t;
+struct player_t;
+struct pspdef_t;
+struct thinker_t;
+
 typedef  void (*actionf_v)();
-typedef  void (*actionf_p1)( void* );
-typedef  void (*actionf_p2)( void*, void* );
+typedef  void (*actionf_p1)(mobj_t*);
+typedef  void (*actionf_p2)(player_t*, pspdef_t*);
+typedef  void (*actionf_p3)(thinker_t*);
 
 typedef union
 {
   actionf_p1	acp1;
   actionf_v	acv;
   actionf_p2	acp2;
-
+  actionf_p3	acp3;
 } actionf_t;
 
 
@@ -61,13 +67,12 @@ typedef actionf_t  think_t;
 
 
 // Doubly linked list of actors.
-typedef struct thinker_s
+struct thinker_t
 {
-    struct thinker_s*	prev;
-    struct thinker_s*	next;
-    think_t		function;
-    
-} thinker_t;
+    thinker_t*	prev;
+    thinker_t*	next;
+    think_t	function;
+};
 
 
 

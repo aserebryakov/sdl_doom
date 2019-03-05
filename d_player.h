@@ -80,7 +80,7 @@ typedef enum
 //
 // Extended player object info: player_t
 //
-typedef struct player_s
+struct player_t
 {
     mobj_t*		mo;
     playerstate_t	playerstate;
@@ -163,7 +163,7 @@ typedef struct player_s
     // True if secret level has been done.
     boolean		didsecret;	
 
-} player_t;
+};
 
 
 //

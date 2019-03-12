@@ -27,6 +27,7 @@ rcsid[] = "$Id: z_zone.c,v 1.4 1997/02/03 16:47:58 b1 Exp $";
 #include "z_zone.h"
 #include "i_system.h"
 #include "doomdef.h"
+#include <stdlib.h>
 
 
 //
@@ -66,6 +67,8 @@ memzone_t*	mainzone;
 //
 void Z_ClearZone (memzone_t* zone)
 {
+    return;
+
     memblock_t*		block;
 	
     // set the entire zone to one free block
@@ -92,6 +95,8 @@ void Z_ClearZone (memzone_t* zone)
 //
 void Z_Init (void)
 {
+    return;
+
     memblock_t*	block;
     int		size;
 
@@ -121,6 +126,9 @@ void Z_Init (void)
 //
 void Z_Free (void* ptr)
 {
+    free(ptr);
+    return;
+
     memblock_t*		block;
     memblock_t*		other;
 	
@@ -186,6 +194,8 @@ Z_Malloc
   int		tag,
   void*		user )
 {
+    return malloc(size);
+
     int		extra;
     memblock_t*	start;
     memblock_t* rover;
@@ -301,6 +311,9 @@ Z_FreeTags
 ( int		lowtag,
   int		hightag )
 {
+    // TODO: fix memory leak
+    return;
+
     memblock_t*	block;
     memblock_t*	next;
 	
@@ -331,6 +344,8 @@ Z_DumpHeap
 ( int		lowtag,
   int		hightag )
 {
+    return;
+
     memblock_t*	block;
 	
     printf ("zone size: %i  location: %p\n",
@@ -368,6 +383,8 @@ Z_DumpHeap
 //
 void Z_FileDumpHeap (FILE* f)
 {
+    return;
+
     memblock_t*	block;
 	
     fprintf (f,"zone size: %i  location: %p\n",mainzone->size,mainzone);
@@ -401,6 +418,8 @@ void Z_FileDumpHeap (FILE* f)
 //
 void Z_CheckHeap (void)
 {
+    return;
+
     memblock_t*	block;
 	
     for (block = mainzone->blocklist.next ; ; block = block->next)
@@ -433,6 +452,8 @@ Z_ChangeTag2
 ( void*		ptr,
   int		tag )
 {
+    return;
+
     memblock_t*	block;
 	
     block = (memblock_t *) ( (byte *)ptr - sizeof(memblock_t));
@@ -453,6 +474,8 @@ Z_ChangeTag2
 //
 int Z_FreeMemory (void)
 {
+    return 1024*1024*1024;
+
     memblock_t*		block;
     int			free;
 	

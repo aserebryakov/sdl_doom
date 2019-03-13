@@ -28,17 +28,18 @@
 #pragma interface
 #endif
 
+#include <stdint.h>
 
 // Endianess handling.
 // WAD files are stored little endian.
 #ifdef __BIG_ENDIAN__
 short	SwapSHORT(short);
-long	SwapLONG(long);
+int32_t	SwapLONG(uint32_t);
 #define SHORT(x)	((short)SwapSHORT((unsigned short) (x)))
-#define LONG(x)         ((long)SwapLONG((unsigned long) (x)))
+#define LONG(x)         ((int32_t)SwapLONG((uint32_t) (x)))
 #else
-#define SHORT(x)	(x)
-#define LONG(x)         (x)
+#define SHORT(x) (x)
+#define LONG(x)  static_cast<int32_t>((x))
 #endif
 
 

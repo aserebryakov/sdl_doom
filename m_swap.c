@@ -42,7 +42,7 @@ unsigned short SwapSHORT(unsigned short x)
 }
 
 // Swapping 32bit.
-unsigned long SwapLONG( unsigned long x)
+uint32_t SwapLONG( uint32_t x)
 {
     return
 	(x>>24)

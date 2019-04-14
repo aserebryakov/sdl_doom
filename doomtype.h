@@ -29,7 +29,45 @@
 #define __BYTEBOOL__
 // Fixed to use builtin bool type with C++.
 #ifdef __cplusplus
-typedef bool boolean;
+/**
+ * This type is required to fix the issue with sizeof(bool) in GCC
+ *
+ * Due to the fact that size of boolean type is implementation defined by the
+ * standard, it isn't portable and differs from C boolean defined below.
+ */
+union boolean {
+    boolean() :
+        val{false}
+    {
+    }
+
+    boolean(const bool& value) :
+        val{value}
+    {
+    }
+
+    inline operator bool()
+    {
+        return val;
+    }
+
+    inline boolean& operator=(const bool& v)
+    {
+        val = v;
+        return *this;
+    }
+
+    inline boolean& operator^=(const bool& v)
+    {
+        val ^= v;
+        return *this;
+    }
+
+    bool val;
+    int padding;
+};
+
+//typedef bool boolean;
 #else
 typedef enum {false, true} boolean;
 #endif

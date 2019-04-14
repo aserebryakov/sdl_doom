@@ -28,7 +28,7 @@ rcsid[] = "$Id: z_zone.c,v 1.4 1997/02/03 16:47:58 b1 Exp $";
 #include "i_system.h"
 #include "doomdef.h"
 #include <stdlib.h>
-
+#include <iostream>
 
 //
 // ZONE MEMORY ALLOCATION
@@ -126,6 +126,7 @@ void Z_Init (void)
 //
 void Z_Free (void* ptr)
 {
+    std::cout << __FUNCTION__ << ": ptr = " << ptr << std::endl;
     free(ptr);
     return;
 
@@ -194,7 +195,17 @@ Z_Malloc
   int		tag,
   void*		user )
 {
-    return malloc(size);
+    // We definitely have troubles with allocation
+    auto ptr = malloc(size);
+
+    if (user != nullptr)
+    {
+        auto target = static_cast<void**>(user);
+        *target = ptr;
+    }
+
+    std::cout << "malloc: " << ptr << " size: " << size << std::endl;
+    return ptr;
 
     int		extra;
     memblock_t*	start;
@@ -452,6 +463,7 @@ Z_ChangeTag2
 ( void*		ptr,
   int		tag )
 {
+    // Do nothing.
     return;
 
     memblock_t*	block;

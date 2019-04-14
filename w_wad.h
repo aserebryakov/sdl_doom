@@ -28,6 +28,9 @@
 #pragma interface
 #endif
 
+#include <iostream>
+#include <string>
+#include <stdint.h>
 
 //
 // TYPES
@@ -42,24 +45,42 @@ typedef struct
 } wadinfo_t;
 
 
-typedef struct
+struct filelump_t
 {
-    int			filepos;
-    int			size;
-    char		name[8];
-    
-} filelump_t;
+    int32_t filepos;
+    int32_t size;
+    char name[8];
+};
+
+inline std::ostream& operator<<(std::ostream& out, const filelump_t lump)
+{
+    out << "filepos = " << lump.filepos << "\n";
+    out << "size = " << lump.size << "\n";
+    out << "name = " << std::string{lump.name, 8} << "\n";
+
+    return out;
+}
 
 //
 // WADFILE I/O related stuff.
 //
-typedef struct
+struct lumpinfo_t
 {
     char	name[8];
     int		handle;
     int		position;
     int		size;
-} lumpinfo_t;
+};
+
+inline std::ostream& operator<<(std::ostream& out, const lumpinfo_t lump)
+{
+    out << "name = " << std::string{lump.name, 8} << "\n";
+    out << "handle = " << lump.handle << "\n";
+    out << "position = " << lump.position << "\n";
+    out << "size = " << lump.size << "\n";
+
+    return out;
+}
 
 
 extern	void**		lumpcache;

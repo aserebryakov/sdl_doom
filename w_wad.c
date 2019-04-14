@@ -35,6 +35,7 @@ rcsid[] = "$Id: w_wad.c,v 1.5 1997/02/03 16:47:57 b1 Exp $";
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <alloca.h>
+#include <iostream>
 #define O_BINARY		0
 #endif
 
@@ -193,18 +194,22 @@ void W_AddFile (char *filename)
 	    
 	    // ???modifiedgame = true;		
 	}
+
 	header.numlumps = LONG(header.numlumps);
 	header.infotableofs = LONG(header.infotableofs);
+
 	length = header.numlumps*sizeof(filelump_t);
-	fileinfo = static_cast<filelump_t*>(alloca (length));
+
+	fileinfo = static_cast<filelump_t*>(alloca(length));
 	lseek (handle, header.infotableofs, SEEK_SET);
 	read (handle, fileinfo, length);
+
 	numlumps += header.numlumps;
     }
 
     
     // Fill in lumpinfo
-    lumpinfo = static_cast<lumpinfo_t*>(realloc (lumpinfo, numlumps*sizeof(lumpinfo_t)));
+    lumpinfo = static_cast<lumpinfo_t*>(realloc(lumpinfo, numlumps*sizeof(lumpinfo_t)));
 
     if (!lumpinfo)
 	I_Error ("Couldn't realloc lumpinfo");
@@ -215,10 +220,12 @@ void W_AddFile (char *filename)
 	
     for (i=startlump ; i<numlumps ; i++,lump_p++, fileinfo++)
     {
+    std::cout << "fileinfo:\n" << *fileinfo << std::endl;
 	lump_p->handle = storehandle;
 	lump_p->position = LONG(fileinfo->filepos);
-	lump_p->size = LONG(fileinfo->size);
 	strncpy (lump_p->name, fileinfo->name, 8);
+	lump_p->size = LONG(fileinfo->size);
+    std::cout << "lump:\n" << *lump_p << std::endl;
     }
 	
     if (reloadname)
@@ -433,36 +440,36 @@ W_ReadLump
 ( int		lump,
   void*		dest )
 {
-    int		c;
-    lumpinfo_t*	l;
-    int		handle;
-	
+    lumpinfo_t* l;
+    int handle;
+
     if (lump >= numlumps)
-	I_Error ("W_ReadLump: %i >= numlumps",lump);
+        I_Error ("W_ReadLump: %i >= numlumps",lump);
 
     l = lumpinfo+lump;
-	
+
     // ??? I_BeginRead ();
-	
+
     if (l->handle == -1)
     {
-	// reloadable file, so use open / read / close
-	if ( (handle = open (reloadname,O_RDONLY | O_BINARY)) == -1)
-	    I_Error ("W_ReadLump: couldn't open %s",reloadname);
+        // reloadable file, so use open / read / close
+        if ( (handle = open (reloadname,O_RDONLY | O_BINARY)) == -1)
+            I_Error ("W_ReadLump: couldn't open %s",reloadname);
     }
     else
-	handle = l->handle;
-		
+        handle = l->handle;
+
     lseek (handle, l->position, SEEK_SET);
-    c = read (handle, dest, l->size);
+    std::cout << dest << " " << "\nlump:\n" << *l << std::endl;
+    int c = read (handle, dest, l->size);
 
     if (c < l->size)
-	I_Error ("W_ReadLump: only read %i of %i on lump %i",
-		 c,l->size,lump);	
+        I_Error ("W_ReadLump: only read %i of %i on lump %i",
+                c,l->size,lump);	
+    std::cout << "bytes read: " << c << std::endl;
 
     if (l->handle == -1)
-	close (handle);
-		
+        close (handle);
     // ??? I_EndRead ();
 }
 
@@ -472,30 +479,30 @@ W_ReadLump
 //
 // W_CacheLumpNum
 //
-void*
-W_CacheLumpNum
-( int		lump,
-  int		tag )
+void* W_CacheLumpNum(int lump, int tag)
 {
     byte*	ptr;
 
     if ((unsigned)lump >= numlumps)
-	I_Error ("W_CacheLumpNum: %i >= numlumps",lump);
-		
+        I_Error ("W_CacheLumpNum: %i >= numlumps",lump);
+
     if (!lumpcache[lump])
     {
-	// read the lump in
-	
-	//printf ("cache miss on lump %i\n",lump);
-	ptr = static_cast<byte*>(Z_Malloc (W_LumpLength (lump), tag, &lumpcache[lump]));
-	W_ReadLump (lump, lumpcache[lump]);
+        // read the lump in
+
+        printf("cache miss on lump %i\n",lump);
+        std::cout << "Before malloc: lumpcache[lump] = " << lumpcache[lump] << std::endl;
+        ptr = static_cast<byte*>(Z_Malloc(W_LumpLength(lump), tag, &lumpcache[lump]));
+        std::cout << "Before read: lumpcache[lump] = " << lumpcache[lump] << std::endl;
+        W_ReadLump(lump, lumpcache[lump]);
+        std::cout << "After read: lumpcache[lump] = " << lumpcache[lump] << std::endl;
     }
     else
     {
-	//printf ("cache hit on lump %i\n",lump);
-	Z_ChangeTag (lumpcache[lump],tag);
+        printf ("cache hit on lump %i\n",lump);
+        Z_ChangeTag(lumpcache[lump],tag);
     }
-	
+
     return lumpcache[lump];
 }
 

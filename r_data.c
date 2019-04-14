@@ -48,6 +48,8 @@ rcsid[] = "$Id: r_data.c,v 1.4 1997/02/03 16:47:55 b1 Exp $";
 
 #include "r_data.h"
 
+#include "d_debug.h"
+
 //
 // Graphics.
 // DOOM graphics for walls and sprites
@@ -470,7 +472,7 @@ void R_InitTextures (void)
     numtextures1 = LONG(*maptex);
     maxoff = W_LumpLength (W_GetNumForName ("TEXTURE1"));
     directory = maptex+1;
-	
+
     if (W_CheckNumForName ("TEXTURE2") != -1)
     {
 	maptex2 = static_cast<int*>(W_CacheLumpName ("TEXTURE2", PU_STATIC));
@@ -499,6 +501,12 @@ void R_InitTextures (void)
     temp1 = W_GetNumForName ("S_START");  // P_???????
     temp2 = W_GetNumForName ("S_END") - 1;
     temp3 = ((temp2-temp1+63)/64) + ((numtextures+63)/64);
+
+    PRINT_VAR(temp1);
+    PRINT_VAR(temp2);
+    PRINT_VAR(temp3);
+    PRINT_VAR(numtextures);
+
     printf("[");
     for (i = 0; i < temp3; i++)
 	printf(" ");
@@ -522,6 +530,9 @@ void R_InitTextures (void)
 		
 	offset = LONG(*directory);
 
+    PRINT_VAR(directory);
+    PRINT_VAR(*directory);
+
 	if (offset > maxoff)
 	    I_Error ("R_InitTextures: bad texture directory");
 	
@@ -537,6 +548,13 @@ void R_InitTextures (void)
 	texture->patchcount = SHORT(mtexture->patchcount);
 
 	memcpy (texture->name, mtexture->name, sizeof(texture->name));
+
+    PRINT_VAR(texture->name);
+    PRINT_VAR(texture->width);
+    PRINT_VAR(mtexture->width);
+    PRINT_VAR(texture->height);
+    PRINT_VAR(mtexture->height);
+
 	mpatch = &mtexture->patches[0];
 	patch = &texture->patches[0];
 
